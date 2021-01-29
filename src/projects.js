@@ -1,5 +1,3 @@
-import { compareAsc, format } from 'date-fns'
-
 let i = 0;
 
 function createProjectSection() {
@@ -9,6 +7,10 @@ function createProjectSection() {
     const projectHeader = document.createElement("h2");
     projectHeader.innerHTML = "Your Projects";
     projectSection.appendChild(projectHeader);
+
+    const projectList = document.createElement("section");
+    displayProject;
+    projectSection.appendChild(projectList);
 
     const addNewProject = document.createElement("button");
     addNewProject.innerHTML = "Add a new Project";
@@ -24,6 +26,7 @@ function createProjectForm() {
 
     const projectFormCloseBtn = document.createElement("button");
     projectFormCloseBtn.innerHTML = "X";
+    projectFormCloseBtn.addEventListener('click', cancelForm);
     projectForm.appendChild(projectFormCloseBtn);
 
     const projectNameLabel = document.createElement("label");
@@ -51,9 +54,18 @@ function createProjectForm() {
 
     const cancelbtn = document.createElement("button");
     cancelbtn.innerHTML = "Cancel";
+    cancelbtn.addEventListener('click', cancelForm);
     projectForm.appendChild(cancelbtn);
 
     projectSection.appendChild(projectForm);
+
+    return createProjectForm;
+}
+
+function cancelForm () {
+    projectNameInput.value = "";
+    projectDescriptionInput.value = "";
+    projectForm.style.display = "none";
 }
 
 function addNewProject() {
@@ -63,6 +75,40 @@ function addNewProject() {
     i++;
     document.getElementById("projectNameInput").value = "";
     document.getElementById("projectDescriptionInput").value = "";
+}
+
+function displayProject() {
+    for(pnum = 0; pnum < projects.length; pnum++) {
+        let cell = document.createElement("div");
+        cell.setAttribute("data-projid", pnum);
+        cell.innerHTML = '<h2>' + projects[pnum].name + '<h2>';
+        projectList.appendChild(cell).className = "project-item";
+        
+        let editbtn = document.createElement('button');
+        editbtn.innerHTML = "Edit Project";
+        editbtn.addEventListener("click", createProjectForm);
+        projectNameInput.value = projects[pnum].name;
+        projectDescriptionInput.value = projects[pnum].description;
+
+        let projectitems = document.querySelectorAll('.project-item');
+        projectitems.forEach(projectitem => projectitem.appendChild(editbtn).className = "editbtn");
+
+    }
+
+    let projectitems = querySelectorAll('.project-item');
+    projectitems.forEach(projectitem => projectitem.addEventListener('mouseover', function () {
+        let chosen = document.querySelector('.project-item' + this.dataset.projid);
+        for (let chs of chosen) {
+            chs.style.display = "inline-block";
+        }
+    }));
+
+    projectitems.forEach(projectitem => projectitem.addEventListener('mouseout', function () {
+        let chosen = document.querySelector('.project-item' + this.dataset.projid);
+        for (let chs of chosen) {
+            chs.style.display = "none";
+        }
+    }));
 }
 
 function createTaskForm () {
