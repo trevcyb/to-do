@@ -25,6 +25,8 @@ function loadHome () {
 
     const aboutUsPage = createAboutUs();
 
+    content.innerHTML = "";
+
     setActive("home");
 
     content.appendChild(aboutUsPage);

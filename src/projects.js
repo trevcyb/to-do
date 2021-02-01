@@ -209,6 +209,8 @@ function loadProjects() {
 
     const projectPage = createProjectSection();
 
+    content.innerHTML = "";
+
     setActive("projectsSB");
 
     content.appendChild(projectPage);
