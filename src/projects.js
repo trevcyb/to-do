@@ -17,7 +17,7 @@ function createProjectSection() {
     addNewProject.addEventListener("click", createProjectForm);
     projectSection.appendChild(addNewProject);
 
-    return createProjectSection;
+    return projectSection;
 }
 
 function createProjectForm() {
@@ -57,9 +57,25 @@ function createProjectForm() {
     cancelbtn.addEventListener('click', cancelForm);
     projectForm.appendChild(cancelbtn);
 
+    const deletebtn = document.createElement("button");
+    deletebtn.innerHTML = "Delete";
+    deletebtn.addEventListener('click', deleteProject);
+    deletebtn.style.display = "none";
+    projectForm.appendChild(deletebtn);
+
     projectSection.appendChild(projectForm);
 
-    return createProjectForm;
+    return projectForm;
+}
+
+function deleteProject () {
+    projects.splice(pnum, 1);
+    alert("Item was removed");
+
+    let projectGrid = document.querySelectorAll(".project-item");
+    projectGrid.forEach(item => item.remove());
+
+    displayProject();
 }
 
 function cancelForm () {
@@ -75,6 +91,8 @@ function addNewProject() {
     i++;
     document.getElementById("projectNameInput").value = "";
     document.getElementById("projectDescriptionInput").value = "";
+    projectForm.display.style = "none";
+    displayProject;
 }
 
 function displayProject() {
@@ -86,7 +104,11 @@ function displayProject() {
         
         let editbtn = document.createElement('button');
         editbtn.innerHTML = "Edit Project";
-        editbtn.addEventListener("click", createProjectForm);
+        editbtn.classList = "edit";
+        editbtn.addEventListener("click", () => {
+            createProjectForm;
+            deletebtn.style.display = "block";
+        });
         projectNameInput.value = projects[pnum].name;
         projectDescriptionInput.value = projects[pnum].description;
 
@@ -173,3 +195,23 @@ class task {
         this.completed = completed;
     }
 }
+
+function setActive(id) {
+    const activeBtn = document.querySelector(".tab.active");
+    if (activeBtn) activeBtn.classList.remove("active");
+
+    const projectsBtn = document.getElementById(id);
+    projectsBtn.classList.add("active");
+}
+
+function loadProjects() {
+    const content = document.getElementById("main");
+
+    const projectPage = createProjectSection();
+
+    setActive("projectsSB");
+
+    content.appendChild(projectPage);
+}
+
+export default loadProjects;
