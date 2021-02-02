@@ -3,10 +3,12 @@ function createAboutUs() {
 
     const aboutUsHeader = document.createElement("h2");
     aboutUsHeader.innerHTML = "About Noteriety";
+    aboutUsHeader.id = "aboutUsHeader";
     aboutUs.appendChild(aboutUsHeader);
 
     const aboutUsInfo = document.createElement("p");
     aboutUsInfo.innerHTML = "In a constantly evolving world, we're here to help you make sense of the madness. Introducing Noteriety, to help you keep track of the daily bustle.";
+    aboutUsInfo.id = "aboutUsInfo";
     aboutUs.appendChild(aboutUsInfo);
 
     return aboutUs;

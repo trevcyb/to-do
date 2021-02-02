@@ -1,28 +1,55 @@
 let i = 0;
 
+let projects = [];
+
+class project {
+    constructor(name, description, priority, tasks) {
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
+        this.tasks = tasks;
+    }
+}
+
+class task {
+    constructor(name, duedate, notes, priority, completed) {
+        this.name = name;
+        this.duedate = duedate;
+        this.notes = notes;
+        this.priority = priority;
+        this.completed = completed;
+    }
+}
+
 function createProjectSection() {
 
     const projectSection = document.createElement("section");
 
     const projectHeader = document.createElement("h2");
     projectHeader.innerHTML = "Your Projects";
+    projectHeader.id = "projectHeader";
     projectSection.appendChild(projectHeader);
 
     const projectList = document.createElement("section");
-    displayProject;
     projectSection.appendChild(projectList);
 
     const addNewProject = document.createElement("button");
     addNewProject.innerHTML = "Add a new Project";
-    addNewProject.addEventListener("click", createProjectForm);
+    addNewProject.addEventListener("click", () => {
+        const projectForm = document.querySelector("#projectForm");
+        projectForm.style.display = "block";
+    });
     projectSection.appendChild(addNewProject);
 
     return projectSection;
 }
 
+
 function createProjectForm() {
 
     const projectForm = document.createElement("form");
+    projectForm.style.display = "none";
+    projectForm.id = "projectForm";
 
     const projectFormCloseBtn = document.createElement("button");
     projectFormCloseBtn.innerHTML = "X";
@@ -45,7 +72,7 @@ function createProjectForm() {
 
     const projectDescriptionInput = document.createElement("input");
     projectDescriptionInput.id = "projectDescriptionInput";
-    projectDescriptionInput.appendChild(projectDescriptionInput);
+    projectForm.appendChild(projectDescriptionInput);
 
     const submitbtn = document.createElement("button");
     submitbtn.innerHTML = "Submit";
@@ -62,8 +89,6 @@ function createProjectForm() {
     deletebtn.addEventListener('click', deleteProject);
     deletebtn.style.display = "none";
     projectForm.appendChild(deletebtn);
-
-    projectSection.appendChild(projectForm);
 
     return projectForm;
 }
@@ -88,11 +113,14 @@ function addNewProject() {
     projectName = document.getElementById("projectNameInput").value;
     projectDescription = document.getElementById("projectDescriptionInput").value;
     projects[i] = new project(projectName, projectDescription, i, []);
+    console.log(projects[i]);
     i++;
     document.getElementById("projectNameInput").value = "";
     document.getElementById("projectDescriptionInput").value = "";
     projectForm.display.style = "none";
     displayProject;
+
+    return addNewProject;
 }
 
 function displayProject() {
@@ -175,27 +203,6 @@ function createTaskForm () {
 
 }
 
-let projects = [];
-
-class project {
-    constructor(name, description, priority, tasks) {
-        this.name = name;
-        this.description = description;
-        this.priority = priority;
-        this.tasks = tasks;
-    }
-}
-
-class task {
-    constructor(name, duedate, notes, priority, completed) {
-        this.name = name;
-        this.duedate = duedate;
-        this.notes = notes;
-        this.priority = priority;
-        this.completed = completed;
-    }
-}
-
 function setActive(id) {
     const activeBtn = document.querySelector(".tab.active");
     if (activeBtn) activeBtn.classList.remove("active");
@@ -209,11 +216,14 @@ function loadProjects() {
 
     const projectPage = createProjectSection();
 
+    const projectFormPage = createProjectForm();
+
     content.innerHTML = "";
 
     setActive("projectsSB");
 
     content.appendChild(projectPage);
+    content.appendChild(projectFormPage);
 }
 
 export default loadProjects;

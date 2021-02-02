@@ -47,10 +47,31 @@ header {
 
 #main {
     border:grey 2px solid;
+    background-color: grey;
     border-radius: 25px;
     position: fixed;
     height: 100%;
     width: 840px;
     right: 8px;
     top: 60px;
+}
+
+#projectHeader {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: grey;
+    border-bottom: black 1px solid;
+    text-align: center;
+}
+
+#aboutUsHeader {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: grey;
+    border-bottom: black 1px solid;
+    text-align: center;
+}
+
+#aboutUsInfo {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-weight: bold;
 }
