@@ -39,8 +39,8 @@ function createProjectSection() {
     const addNewProject = document.createElement("button");
     addNewProject.innerHTML = "Add a new Project";
     addNewProject.addEventListener("click", () => {
-        const projectForm = document.querySelector("#projectForm");
-        projectForm.style.display = "block";
+        const projectFormDiv = document.querySelector("#projectFormDiv");
+        projectFormDiv.style.display = "block";
     });
     projectSection.appendChild(addNewProject);
 
@@ -50,18 +50,24 @@ function createProjectSection() {
 
 function createProjectForm() {
 
+    const projectFormDiv = document.createElement("div");
+    projectFormDiv.id = "projectFormDiv";
+    
     const projectForm = document.createElement("form");
-    projectForm.style.display = "none";
+    projectForm.style.display = "block";
     projectForm.id = "projectForm";
+    projectFormDiv.appendChild(projectForm);
 
     const projectFormCloseBtn = document.createElement("button");
     projectFormCloseBtn.innerHTML = "X";
+    projectFormCloseBtn.type = "button";
     projectFormCloseBtn.addEventListener('click', cancelForm);
     projectForm.appendChild(projectFormCloseBtn);
 
     const projectNameLabel = document.createElement("label");
     projectNameLabel.innerHTML = "Enter a name for your project:"
     projectNameLabel.htmlFor = "projectNameInput";
+    projectNameLabel.id = "projectNameLabel";
     projectForm.appendChild(projectNameLabel);
 
     const projectNameInput = document.createElement("input");
@@ -71,6 +77,7 @@ function createProjectForm() {
     const projectDescriptionLabel = document.createElement("label");
     projectDescriptionLabel.htmlFor = "projectDescriptionInput";
     projectDescriptionLabel.innerHTML = "Enter a description for your project:";
+    projectDescriptionLabel.id = "projectDescriptionLabel";
     projectForm.appendChild(projectDescriptionLabel);
 
     const projectDescriptionInput = document.createElement("input");
@@ -83,12 +90,13 @@ function createProjectForm() {
     submitbtn.innerHTML = "Submit";
     submitbtn.addEventListener("click", () => {
     addNewProject();
-    projectForm.style.display = "none";
+    projectFormDiv.style.display = "none";
     });
     projectForm.appendChild(submitbtn);
 
     const cancelbtn = document.createElement("button");
     cancelbtn.innerHTML = "Cancel";
+    cancelbtn.type = "button";
     cancelbtn.addEventListener('click', cancelForm);
     projectForm.appendChild(cancelbtn);
 
@@ -99,7 +107,14 @@ function createProjectForm() {
     deletebtn.style.display = "none";
     projectForm.appendChild(deletebtn);
 
-    return projectForm;
+    const saveeditbtn = document.createElement("button");
+    saveeditbtn.type = "button";
+    saveeditbtn.id = "saveeditbtn";
+    saveeditbtn.innerHTML = "Save Edit";
+    saveeditbtn.style.display = "none";
+    projectForm.appendChild(saveeditbtn);
+
+    return projectFormDiv;
 }
 
 function deleteProject () {
@@ -115,7 +130,7 @@ function deleteProject () {
 function cancelForm () {
     projectNameInput.value = "";
     projectDescriptionInput.value = "";
-    projectForm.style.display = "none";
+    projectFormDiv.style.display = "none";
 }
 
 function addNewProject() {
@@ -125,6 +140,10 @@ function addNewProject() {
     i++;
     document.getElementById("projectNameInput").value = "";
     document.getElementById("projectDescriptionInput").value = "";
+
+    let projectitems = document.querySelectorAll(".project-item");
+    projectitems.forEach(proj => proj.remove());
+
     displayProject();
 }
 
@@ -166,8 +185,8 @@ function displayProject() {
 }
 
 function editProject (event) {
-    const projectForm = document.getElementById("projectForm");
-    projectForm.style.display = "block";
+    const projectFormDiv = document.getElementById("projectFormDiv");
+    projectFormDiv.style.display = "block";
 
     document.getElementById("projectNameInput").value = projects[event.target.parentElement.dataset.projid].name;
     document.getElementById("projectDescriptionInput").value = projects[event.target.parentElement.dataset.projid].description;
@@ -175,23 +194,21 @@ function editProject (event) {
     const submitbtn = document.getElementById("submitbtn");
     submitbtn.style.display = "none";
 
-    const saveeditbtn = document.createElement("button");
-    saveeditbtn.type = "button";
-    saveeditbtn.is = "saveeditbtn";
-    saveeditbtn.innerHTML = "Save Edit";
+    const saveeditbtn = document.getElementById("saveeditbtn");
+    saveeditbtn.style.display = "block";
+
     saveeditbtn.addEventListener("click", () => {
         projects[event.target.parentElement.dataset.projid].name = document.getElementById("projectNameInput").value;
         projects[event.target.parentElement.dataset.projid].description = document.getElementById("projectDescriptionInput").value;
         document.getElementById("projectNameInput").value = "";
         document.getElementById("projectDescriptionInput").value = "";
-        projectForm.style.display = "none";
+        projectFormDiv.style.display = "none";
 
         let projectitems = document.querySelectorAll(".project-item");
         projectitems.forEach(proj => proj.remove());
 
         displayProject();
     });
-    projectForm.appendChild(saveeditbtn);
 
     const deletebtn = document.getElementById("deletebtn");
     deletebtn.style.display = "block";
