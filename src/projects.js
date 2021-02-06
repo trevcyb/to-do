@@ -1,5 +1,3 @@
-import { sub } from "date-fns";
-
 let i = 0;
 
 let projects = [];
@@ -38,7 +36,11 @@ function createProjectSection() {
 
     const addNewProject = document.createElement("button");
     addNewProject.innerHTML = "Add a new Project";
+    addNewProject.id = "addNewProject";
+    addNewProject.type = "button";
     addNewProject.addEventListener("click", () => {
+        document.getElementById("projectNameInput").value = "";
+        document.getElementById("projectDescriptionInput").value = "";
         const projectFormDiv = document.querySelector("#projectFormDiv");
         projectFormDiv.style.display = "block";
     });
@@ -91,8 +93,6 @@ function createProjectForm() {
     submitbtn.innerHTML = "Submit";
     submitbtn.addEventListener("click", () => {
     addNewProject();
-    projectNameInput.value = "";
-    projectDescriptionInput.value = "";
     projectFormDiv.style.display = "none";
     });
     projectForm.appendChild(submitbtn);
@@ -106,29 +106,19 @@ function createProjectForm() {
 
     const deletebtn = document.createElement("button");
     deletebtn.innerHTML = "Delete";
-    deletebtn.id = "deletebtn";
-    deletebtn.addEventListener('click', deleteProject);
+    deletebtn.id = "projectdeletebtn";
+    deletebtn.type = "button";
     deletebtn.style.display = "none";
     projectForm.appendChild(deletebtn);
 
     const saveeditbtn = document.createElement("button");
     saveeditbtn.type = "button";
-    saveeditbtn.id = "saveeditbtn";
+    saveeditbtn.id = "projectsaveeditbtn";
     saveeditbtn.innerHTML = "Save Edit";
     saveeditbtn.style.display = "none";
     projectForm.appendChild(saveeditbtn);
 
     return projectFormDiv;
-}
-
-function deleteProject () {
-    projects.splice(pnum, 1);
-    alert("Item was removed");
-
-    let projectGrid = document.querySelectorAll(".project-item");
-    projectGrid.forEach(item => item.remove());
-
-    displayProject();
 }
 
 function cancelForm () {
@@ -143,8 +133,14 @@ function addNewProject() {
     projects[i] = new project(projectName, projectDescription, i, []);
     i++;
 
+    projects = projects.filter((x) => {
+        return x!== undefined;
+    });
+
     let projectitems = document.querySelectorAll(".project-item");
     projectitems.forEach(proj => proj.remove());
+
+    console.log(projects);
 
     displayProject();
 }
@@ -159,10 +155,16 @@ function displayProject() {
         
         let editbtn = document.createElement('button');
         editbtn.innerHTML = "Edit Project";
-        editbtn.classList = "edit";
+        editbtn.style.display = "none";
         editbtn.addEventListener("click", editProject);
-        projectNameInput.value = projects[pnum].name;
-        projectDescriptionInput.value = projects[pnum].description;
+
+        cell.addEventListener("mouseover", () => {
+            editbtn.style.display = "block";
+        })
+
+        cell.addEventListener("mouseout", () => {
+            editbtn.style.display = "none";
+        })
 
         let projectitems = document.querySelectorAll('.project-item');
         projectitems.forEach(projectitem => projectitem.appendChild(editbtn).className = "editbtn");
@@ -190,18 +192,20 @@ function editProject (event) {
     const projectFormDiv = document.getElementById("projectFormDiv");
     projectFormDiv.style.display = "block";
 
-    document.getElementById("projectNameInput").value = projects[event.target.parentElement.dataset.projid].name;
-    document.getElementById("projectDescriptionInput").value = projects[event.target.parentElement.dataset.projid].description;
+    const projectID = event.target.parentElement.dataset.projid;
 
-    const submitbtn = document.getElementById("submitbtn");
+    document.getElementById("projectNameInput").value = projects[projectID].name;
+    document.getElementById("projectDescriptionInput").value = projects[projectID].description;
+
+    const submitbtn = document.getElementById("projectsubmitbtn");
     submitbtn.style.display = "none";
 
-    const saveeditbtn = document.getElementById("saveeditbtn");
+    const saveeditbtn = document.getElementById("projectsaveeditbtn");
     saveeditbtn.style.display = "block";
 
     saveeditbtn.addEventListener("click", () => {
-        projects[event.target.parentElement.dataset.projid].name = document.getElementById("projectNameInput").value;
-        projects[event.target.parentElement.dataset.projid].description = document.getElementById("projectDescriptionInput").value;
+        projects[projectID].name = document.getElementById("projectNameInput").value;
+        projects[projectID].description = document.getElementById("projectDescriptionInput").value;
         document.getElementById("projectNameInput").value = "";
         document.getElementById("projectDescriptionInput").value = "";
         projectFormDiv.style.display = "none";
@@ -209,11 +213,37 @@ function editProject (event) {
         let projectitems = document.querySelectorAll(".project-item");
         projectitems.forEach(proj => proj.remove());
 
-        displayProject();
-    });
+        saveeditbtn.style.display = "none";
+        deletebtn.style.display = "none";
+        submitbtn.style.display = "block";
 
-    const deletebtn = document.getElementById("deletebtn");
+        displayProject();
+    }, {once:true}
+    );
+
+    const deletebtn = document.getElementById("projectdeletebtn");
     deletebtn.style.display = "block";
+    deletebtn.addEventListener("click", () => {
+        projects.splice(projectID, 1);
+    
+        let projectGrid = document.querySelectorAll(".project-item");
+        projectGrid.forEach(item => item.remove());
+    
+        const saveeditbtn = document.getElementById("projectsaveeditbtn");
+        const deletebtn = document.getElementById("projectdeletebtn");
+        const submitbtn = document.getElementById("projectsubmitbtn");
+        const projectFormDiv = document.getElementById("projectFormDiv");
+        
+        saveeditbtn.style.display = "none";
+        deletebtn.style.display = "none";
+        submitbtn.style.display = "block";
+        projectFormDiv.style.display = "none";
+
+        console.log(projects);
+    
+        displayProject();
+    }, {once: true}
+    );
 }
 
 
