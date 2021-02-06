@@ -16,7 +16,8 @@ header {
 
 #sidebar {
     height: 100%;
-    width: 160px;
+    width: 17%;
+    max-width: 212px;
     position: fixed;
     top: 60px;
     left: 8px;
@@ -48,9 +49,9 @@ header {
     border:grey 2px solid;
     background-color: grey;
     border-radius: 25px;
-    position: fixed;
+    position: absolute;
     height: 100%;
-    width: 840px;
+    width: 80%;
     right: 8px;
     top: 60px;
 }
@@ -151,4 +152,75 @@ header {
     bottom: 10px;
     left: 450px;
     font-size: 15px;
+}
+
+#projectsaveeditbtn {
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 290px;
+    font-size: 15px;
+}
+
+#projectdeletebtn {
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 380px;
+    font-size: 15px;
+}
+
+#addNewProject {
+    outline: none;
+    border: none;
+    border: 1px solid black;
+    margin-top: 20px;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+}
+
+#addNewProject:hover {
+    transition: ease 1s;
+    background-color: rgb(7, 49, 66);
+}
+
+#addNewProject:active {
+    transition: ease 0.2s;
+    background-color: white;
+    color: black;
+}
+
+.project-item {
+    font-family:'Courier New', Courier, monospace;
+    position: relative;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.project-item h2 {
+    width: 80%;
+    margin-left: 20px;
+}
+
+.editbtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    outline: none;
+    background-color: black;
+    color:white;
+    border: 1px solid black;
+    border-radius: 10px;
 }
