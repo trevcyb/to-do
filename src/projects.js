@@ -60,6 +60,7 @@ function createProjectForm() {
 
     const projectFormCloseBtn = document.createElement("button");
     projectFormCloseBtn.innerHTML = "X";
+    projectFormCloseBtn.id = "projectxbtn";
     projectFormCloseBtn.type = "button";
     projectFormCloseBtn.addEventListener('click', cancelForm);
     projectForm.appendChild(projectFormCloseBtn);
@@ -86,16 +87,19 @@ function createProjectForm() {
 
     const submitbtn = document.createElement("button");
     submitbtn.type = "button";
-    submitbtn.id = "submitbtn";
+    submitbtn.id = "projectsubmitbtn";
     submitbtn.innerHTML = "Submit";
     submitbtn.addEventListener("click", () => {
     addNewProject();
+    projectNameInput.value = "";
+    projectDescriptionInput.value = "";
     projectFormDiv.style.display = "none";
     });
     projectForm.appendChild(submitbtn);
 
     const cancelbtn = document.createElement("button");
     cancelbtn.innerHTML = "Cancel";
+    cancelbtn.id = "projectcancelbtn";
     cancelbtn.type = "button";
     cancelbtn.addEventListener('click', cancelForm);
     projectForm.appendChild(cancelbtn);
@@ -138,8 +142,6 @@ function addNewProject() {
     const projectDescription = document.getElementById("projectDescriptionInput").value;
     projects[i] = new project(projectName, projectDescription, i, []);
     i++;
-    document.getElementById("projectNameInput").value = "";
-    document.getElementById("projectDescriptionInput").value = "";
 
     let projectitems = document.querySelectorAll(".project-item");
     projectitems.forEach(proj => proj.remove());
