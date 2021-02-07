@@ -49,6 +49,47 @@ function createProjectSection() {
     return projectSection;
 }
 
+function createTaskSection() {
+
+    const taskSectionDiv = document.createElement("div");
+    taskSectionDiv.id = "taskSectionDiv";
+
+    const taskListDiv = document.createElement("div");
+    taskListDiv.id = "taskListDiv";
+    taskSectionDiv.appendChild(taskListDiv);
+
+    const taskFormHeader = document.createElement("h2");
+    taskFormHeader.id = "taskFormHeader";
+    taskListDiv.appendChild(taskFormHeader);
+
+    const taskForm = document.createElement("ul");
+    taskForm.id = "taskForm";
+    taskListDiv.appendChild(taskForm);
+
+    const addNewTask = document.createElement("li");
+    addNewTask.id = "addNewTask";
+    addNewTask.innerHTML = "Add a New Task";
+    addNewTask.addEventListener('click', () => {
+        const addTaskForm = document.getElementById("addTaskForm");
+        addTaskForm.style.display = "block";
+    })
+    taskForm.appendChild(addNewTask);
+
+    const taskFormSubmit = document.createElement("button");
+    taskFormSubmit.type = "button";
+    taskFormSubmit.innerHTML = "Save";
+    taskFormSubmit.id = "taskFormSubmitBtn";
+    taskListDiv.appendChild(taskFormSubmit);
+
+    const taskFormCancel = document.createElement("button");
+    taskFormCancel.type = "button";
+    taskFormCancel.innerHTML = "Cancel";
+    taskFormCancel.id = "taskFormCancelBtn";
+    taskListDiv.appendChild(taskFormCancel);
+
+    return taskSectionDiv;
+}
+
 
 function createProjectForm() {
 
@@ -173,6 +214,11 @@ function displayProject() {
 
     let projectitems = document.querySelectorAll('.project-item');
 
+    projectitems.forEach(projectitem => projectitem.addEventListener('click', (event) => {
+        taskSectionDiv.style.display = "block";
+        document.getElementById("taskFormHeader").innerHTML = event.target.firstChild.nodeValue;
+    }))
+
     projectitems.forEach(projectitem => projectitem.addEventListener('mouseover', function () {
         let chosen = document.querySelectorAll('.project-item' + this.dataset.projid);
         for (let chs of chosen) {
@@ -249,7 +295,8 @@ function editProject (event) {
 
 function createTaskForm () {
 
-    const taskForm = document.createElement("form");
+    const addTaskForm = document.createElement("form");
+    addTaskForm.id = "addTaskForm";
 
     const taskNameLabel = document.createElement("label");
     taskNameLabel.innerHTML = "Enter a name for your task:";
@@ -287,6 +334,7 @@ function createTaskForm () {
     taskNotes.type = "text";
     taskForm.appendChild(taskNotes);
 
+    return addTaskForm;
 }
 
 function setActive(id) {
@@ -304,12 +352,18 @@ function loadProjects() {
 
     const projectFormPage = createProjectForm();
 
+    const taskSectionPage = createTaskSection();
+
+    const taskFormPage = createTaskForm();
+
     content.innerHTML = "";
 
     setActive("projectsSB");
 
     content.appendChild(projectPage);
     content.appendChild(projectFormPage);
+    content.appendChild(taskSectionPage);
+    content.appendChild(taskFormPage);
 }
 
 export default loadProjects;
