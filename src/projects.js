@@ -2,6 +2,8 @@ let i = 0;
 
 let projects = [];
 
+let selProject = 0;
+
 class project {
     constructor(name, description, priority, tasks) {
         this.name = name;
@@ -70,8 +72,9 @@ function createTaskSection() {
     addNewTask.id = "addNewTask";
     addNewTask.innerHTML = "Add a New Task";
     addNewTask.addEventListener('click', () => {
-        const addTaskForm = document.getElementById("addTaskForm");
-        addTaskForm.style.display = "block";
+        const addTaskDiv = document.getElementById("addTaskDiv");
+        addTaskDiv.style.display = "block";
+        displayTask();
     })
     taskForm.appendChild(addNewTask);
 
@@ -85,11 +88,123 @@ function createTaskSection() {
     taskFormCancel.type = "button";
     taskFormCancel.innerHTML = "Cancel";
     taskFormCancel.id = "taskFormCancelBtn";
+    taskFormCancel.addEventListener("click", () => {
+        taskSectionDiv.style.display = "none";
+        displayTask();
+    })
     taskListDiv.appendChild(taskFormCancel);
 
     return taskSectionDiv;
 }
 
+function createTaskForm () {
+
+    const addTaskDiv = document.createElement("div");
+    addTaskDiv.id = "addTaskDiv";
+
+    const addTaskForm = document.createElement("form");
+    addTaskForm.id = "addTaskForm";
+    addTaskDiv.appendChild(addTaskForm);
+
+    const taskNameLabel = document.createElement("label");
+    taskNameLabel.innerHTML = "Enter your task:";
+    addTaskForm.appendChild(taskNameLabel);
+
+    const taskNameInput = document.createElement("input");
+    taskNameInput.id = "taskNameInput";
+    addTaskForm.appendChild(taskNameInput);
+
+    const taskDueDateLabel = document.createElement("label");
+    taskDueDateLabel.innerHTML = "Enter a Due Date for your Task:";
+    addTaskForm.appendChild(taskDueDateLabel);
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+    const taskDueDate = document.createElement("input");
+    taskDueDate.type = "datetime-local";
+    taskDueDate.name = "duedate";
+    taskDueDate.id = "duedate";
+    taskDueDate.min = today;
+    addTaskForm.appendChild(taskDueDate);
+
+    const taskNotesLabel = document.createElement("label");
+    taskNotesLabel.innerHTML = "Notes:";
+    addTaskForm.appendChild(taskNotesLabel);
+
+    const taskNotes = document.createElement("input");
+    taskNotes.type = "text";
+    addTaskForm.appendChild(taskNotes);
+
+    const taskSubmitBtn = document.createElement("button");
+    taskSubmitBtn.id = "taskSubmitBtn";
+    taskSubmitBtn.type = "button";
+    taskSubmitBtn.innerHTML = "Submit";
+    taskSubmitBtn.addEventListener("click", () => {
+        const newTask = new task(taskNameInput.value, taskDueDate.value, taskNotes.value, 1, false);
+        projects[selProject].tasks.push(newTask);
+        displayTask();
+        taskNameInput.value = "";
+        taskDueDate.value = "";
+        taskNotes.value = "";
+        addTaskDiv.style.display = "none";
+    })
+    addTaskForm.appendChild(taskSubmitBtn);
+
+    const taskCancelBtn = document.createElement("button");
+    taskCancelBtn.id = "taskSubmitBtn";
+    taskCancelBtn.type = "button";
+    taskCancelBtn.innerHTML = "Cancel";
+    taskCancelBtn.addEventListener("click", () => {
+        taskNameInput.value = "";
+        taskDueDate.value = "";
+        taskNotes.value = "";
+        addTaskDiv.style.display = "none";
+    })
+    addTaskForm.appendChild(taskCancelBtn);
+
+    return addTaskDiv;
+}
+
+function displayTask () {
+
+    let taskitems = document.querySelectorAll(".task-item");
+    taskitems.forEach(item => item.remove());
+
+    for(let tnum = 0; tnum < projects[selProject].tasks.length; tnum++) {
+        let taskli = document.createElement("li");
+        taskli.setAttribute("data-taskid", tnum);
+        taskli.innerHTML = projects[selProject].tasks[tnum].name;
+        taskForm.appendChild(taskli).className = 'task-item';
+
+        let editbtn = document.createElement("button");
+        editbtn.innerHTML = "Edit Task";
+        editbtn.style.display = "none";
+//        editbtn.addEventListener("click", editTask);
+
+        taskli.addEventListener("mouseover", () => {
+            editbtn.style.display = "inline-block";
+        })
+
+        taskli.addEventListener("mouseout", () => {
+            editbtn.style.display = "none";
+        })
+
+        let taskitems = document.querySelectorAll(".task-item");
+        taskitems.forEach(item => item.appendChild(editbtn).className = "taskeditbtn");
+    }
+
+}
 
 function createProjectForm() {
 
@@ -216,22 +331,11 @@ function displayProject() {
 
     projectitems.forEach(projectitem => projectitem.addEventListener('click', (event) => {
         taskSectionDiv.style.display = "block";
+        selProject = event.target.parentElement.dataset.projid;
+        console.log(selProject);
         document.getElementById("taskFormHeader").innerHTML = event.target.firstChild.nodeValue;
+        displayTask();
     }))
-
-    projectitems.forEach(projectitem => projectitem.addEventListener('mouseover', function () {
-        let chosen = document.querySelectorAll('.project-item' + this.dataset.projid);
-        for (let chs of chosen) {
-            chs.style.display = "inline-block";
-        }
-    }));
-
-    projectitems.forEach(projectitem => projectitem.addEventListener('mouseout', function () {
-        let chosen = document.querySelectorAll('.project-item' + this.dataset.projid);
-        for (let chs of chosen) {
-            chs.style.display = "none";
-        }
-    }));
 }
 
 function editProject (event) {
@@ -290,51 +394,6 @@ function editProject (event) {
         displayProject();
     }, {once: true}
     );
-}
-
-
-function createTaskForm () {
-
-    const addTaskForm = document.createElement("form");
-    addTaskForm.id = "addTaskForm";
-
-    const taskNameLabel = document.createElement("label");
-    taskNameLabel.innerHTML = "Enter a name for your task:";
-    taskForm.appendChild(taskNameLabel);
-
-    const taskDueDateLabel = document.createElement("label");
-    taskDueDateLabel.innerHTML = "Enter a Due Date for your Task:";
-    taskForm.appendChild(taskDueDateLabel);
-
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-
-    today = yyyy + '-' + mm + '-' + dd;
-
-    const taskDueDate = document.createElement("input");
-    taskDueDate.type = "datetime-local";
-    taskDueDate.name = "duedate";
-    taskDueDate.id = "duedate";
-    taskDueDate.min = today;
-    taskForm.appendChild(taskDueDate);
-
-    const taskNotesLabel = document.createElement("label");
-    taskNotesLabel.innerHTML = "Notes:";
-    taskForm.appendChild(taskNotesLabel);
-
-    const taskNotes = document.createElement("input");
-    taskNotes.type = "text";
-    taskForm.appendChild(taskNotes);
-
-    return addTaskForm;
 }
 
 function setActive(id) {
