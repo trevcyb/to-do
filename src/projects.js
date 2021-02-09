@@ -312,7 +312,10 @@ function displayProject() {
         let editbtn = document.createElement('button');
         editbtn.innerHTML = "Edit Project";
         editbtn.style.display = "none";
-        editbtn.addEventListener("click", editProject);
+        editbtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            editProject();
+        });
 
         cell.addEventListener("mouseover", () => {
             editbtn.style.display = "block";
@@ -338,14 +341,12 @@ function displayProject() {
     }))
 }
 
-function editProject (event) {
+function editProject () {
     const projectFormDiv = document.getElementById("projectFormDiv");
     projectFormDiv.style.display = "block";
 
-    const projectID = event.target.parentElement.dataset.projid;
-
-    document.getElementById("projectNameInput").value = projects[projectID].name;
-    document.getElementById("projectDescriptionInput").value = projects[projectID].description;
+    document.getElementById("projectNameInput").value = projects[selProject].name;
+    document.getElementById("projectDescriptionInput").value = projects[selProject].description;
 
     const submitbtn = document.getElementById("projectsubmitbtn");
     submitbtn.style.display = "none";
@@ -354,8 +355,8 @@ function editProject (event) {
     saveeditbtn.style.display = "block";
 
     saveeditbtn.addEventListener("click", () => {
-        projects[projectID].name = document.getElementById("projectNameInput").value;
-        projects[projectID].description = document.getElementById("projectDescriptionInput").value;
+        projects[selProject].name = document.getElementById("projectNameInput").value;
+        projects[selProject].description = document.getElementById("projectDescriptionInput").value;
         document.getElementById("projectNameInput").value = "";
         document.getElementById("projectDescriptionInput").value = "";
         projectFormDiv.style.display = "none";
@@ -374,7 +375,7 @@ function editProject (event) {
     const deletebtn = document.getElementById("projectdeletebtn");
     deletebtn.style.display = "block";
     deletebtn.addEventListener("click", () => {
-        projects.splice(projectID, 1);
+        projects.splice(selProject, 1);
     
         let projectGrid = document.querySelectorAll(".project-item");
         projectGrid.forEach(item => item.remove());
@@ -423,6 +424,8 @@ function loadProjects() {
     content.appendChild(projectFormPage);
     content.appendChild(taskSectionPage);
     content.appendChild(taskFormPage);
+
+    displayProject();
 }
 
 export default loadProjects;
