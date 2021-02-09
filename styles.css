@@ -216,13 +216,21 @@ header {
 
 .editbtn {
     position: absolute;
-    top: 20px;
+    top: 0px;
     right: 20px;
     outline: none;
     background-color: black;
     color:white;
     border: 1px solid black;
     border-radius: 10px;
+    z-index: 3;
+}
+
+.editbtn:hover {
+    transition: ease 1s;
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(7, 49, 66);
 }
 
 #taskSectionDiv {
@@ -246,7 +254,8 @@ header {
     padding: 10px;
     border: 1px solid #888;
     border-radius: 10px;
-    width: 80%;
+    width: 85%;
+    height: 65%;
     color: white;
     font-family:'Courier New', Courier, monospace;
     position: relative;
@@ -262,13 +271,18 @@ header {
 #taskForm {
     list-style-type: none;
     padding-inline-start: 0%;
+    max-height: 70%;
+    width: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #addNewTask {
     outline: none;
     border: none;
     border: 1px solid white;
-    width: 100%;
+    width: 90%;
+    margin-left: 5%;
     height: 30px;
     text-align: center;
     font-family: 'Courier New', Courier, monospace;
@@ -293,6 +307,21 @@ header {
 
 li {
     color: white;
+    position: relative;
+}
+
+.task-item:hover {
+    border: 1px solid white;
+}
+
+.task-item {
+    width: 95%;
+    border: 1px solid black;
+    height: 30px;
+    padding-left: 20px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 }
 
 #taskFormSubmitBtn {
@@ -302,7 +331,7 @@ li {
     border-radius: 10px;
     position: absolute;
     bottom: 10px;
-    left: 350px;
+    left: 40%;
     font-size: 15px;
 
 }
@@ -314,7 +343,7 @@ li {
     border-radius: 10px;
     position: absolute;
     bottom: 10px;
-    left: 450px;
+    left: 55%;
     font-size: 15px;
 
 }
@@ -350,3 +379,37 @@ li {
     grid-row-gap: 20px;
 }
 
+.taskeditbtn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    outline: none;
+    background-color: black;
+    color:white;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.taskeditbtn:hover {
+    transition: ease 1s;
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(7, 49, 66);
+}
+
+
+::-webkit-scrollbar {
+    width: 5px;
+  }
+
+::-webkit-scrollbar-track {
+    background: grey; 
+  }
+   
+::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+::-webkit-scrollbar-thumb:hover {
+    background: white; 
+  }
