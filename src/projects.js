@@ -43,6 +43,8 @@ function createProjectSection() {
     addNewProject.addEventListener("click", () => {
         document.getElementById("projectNameInput").value = "";
         document.getElementById("projectDescriptionInput").value = "";
+        const submitbtn = document.getElementById("projectsubmitbtn");
+        submitbtn.style.display = "block";
         const projectFormDiv = document.querySelector("#projectFormDiv");
         projectFormDiv.style.display = "block";
     });
@@ -265,6 +267,7 @@ function createProjectForm() {
     deletebtn.id = "projectdeletebtn";
     deletebtn.type = "button";
     deletebtn.style.display = "none";
+    deletebtn.addEventListener("click", deleteProject);
     projectForm.appendChild(deletebtn);
 
     const saveeditbtn = document.createElement("button");
@@ -272,6 +275,7 @@ function createProjectForm() {
     saveeditbtn.id = "projectsaveeditbtn";
     saveeditbtn.innerHTML = "Save Edit";
     saveeditbtn.style.display = "none";
+    saveeditbtn.addEventListener("click", saveEditProject);
     projectForm.appendChild(saveeditbtn);
 
     return projectFormDiv;
@@ -281,9 +285,59 @@ function cancelForm () {
     projectNameInput.value = "";
     projectDescriptionInput.value = "";
     projectFormDiv.style.display = "none";
+
+    const saveeditbtn = document.getElementById("projectsaveeditbtn");
+    const deletebtn = document.getElementById("projectdeletebtn");
+
+    saveeditbtn.style.display = "none";
+    deletebtn.style.display = "none";
+}
+
+function deleteProject() {
+    projects.splice(selProject, 1);
+    
+    let projectGrid = document.querySelectorAll(".project-item");
+    projectGrid.forEach(item => item.remove());
+
+    const saveeditbtn = document.getElementById("projectsaveeditbtn");
+    const deletebtn = document.getElementById("projectdeletebtn");
+    const submitbtn = document.getElementById("projectsubmitbtn");
+    const projectFormDiv = document.getElementById("projectFormDiv");
+    
+    saveeditbtn.style.display = "none";
+    deletebtn.style.display = "none";
+    submitbtn.style.display = "block";
+    projectFormDiv.style.display = "none";
+
+    console.log(projects);
+
+    displayProject();
+}
+
+function saveEditProject() {
+    console.log(projectNameInput.value);
+    projects[selProject].name = projectNameInput.value;
+    projects[selProject].description = projectDescriptionInput.value;
+    projectNameInput.value = "";
+    projectDescriptionInput.value = "";
+    projectFormDiv.style.display = "none";
+
+    let projectitems = document.querySelectorAll(".project-item");
+    projectitems.forEach(proj => proj.remove());
+
+    const saveeditbtn = document.getElementById("projectsaveeditbtn");
+    const deletebtn = document.getElementById("projectdeletebtn");
+    const submitbtn = document.getElementById("projectsubmitbtn");
+
+    saveeditbtn.style.display = "none";
+    deletebtn.style.display = "none";
+    submitbtn.style.display = "block";
+
+    displayProject();
 }
 
 function addNewProject() {
+
     const projectName = document.getElementById("projectNameInput").value;
     const projectDescription = document.getElementById("projectDescriptionInput").value;
     projects[i] = new project(projectName, projectDescription, i, []);
@@ -313,6 +367,7 @@ function displayProject() {
         editbtn.innerHTML = "Edit Project";
         editbtn.style.display = "none";
         editbtn.addEventListener("click", (event) => {
+            selProject = event.target.parentElement.dataset.projid;
             event.stopPropagation();
             editProject();
         });
@@ -335,18 +390,21 @@ function displayProject() {
     projectitems.forEach(projectitem => projectitem.addEventListener('click', (event) => {
         taskSectionDiv.style.display = "block";
         selProject = event.target.parentElement.dataset.projid;
-        console.log(selProject);
         document.getElementById("taskFormHeader").innerHTML = event.target.firstChild.nodeValue;
         displayTask();
     }))
 }
 
-function editProject () {
+function editProject (event) {
+
     const projectFormDiv = document.getElementById("projectFormDiv");
     projectFormDiv.style.display = "block";
 
-    document.getElementById("projectNameInput").value = projects[selProject].name;
-    document.getElementById("projectDescriptionInput").value = projects[selProject].description;
+    const projectNameInput = document.getElementById("projectNameInput");
+    const projectDescriptionInput = document.getElementById("projectDescriptionInput");
+
+    projectNameInput.value = projects[selProject].name;
+    projectDescriptionInput.value = projects[selProject].description;
 
     const submitbtn = document.getElementById("projectsubmitbtn");
     submitbtn.style.display = "none";
@@ -354,47 +412,8 @@ function editProject () {
     const saveeditbtn = document.getElementById("projectsaveeditbtn");
     saveeditbtn.style.display = "block";
 
-    saveeditbtn.addEventListener("click", () => {
-        projects[selProject].name = document.getElementById("projectNameInput").value;
-        projects[selProject].description = document.getElementById("projectDescriptionInput").value;
-        document.getElementById("projectNameInput").value = "";
-        document.getElementById("projectDescriptionInput").value = "";
-        projectFormDiv.style.display = "none";
-
-        let projectitems = document.querySelectorAll(".project-item");
-        projectitems.forEach(proj => proj.remove());
-
-        saveeditbtn.style.display = "none";
-        deletebtn.style.display = "none";
-        submitbtn.style.display = "block";
-
-        displayProject();
-    }, {once:true}
-    );
-
     const deletebtn = document.getElementById("projectdeletebtn");
     deletebtn.style.display = "block";
-    deletebtn.addEventListener("click", () => {
-        projects.splice(selProject, 1);
-    
-        let projectGrid = document.querySelectorAll(".project-item");
-        projectGrid.forEach(item => item.remove());
-    
-        const saveeditbtn = document.getElementById("projectsaveeditbtn");
-        const deletebtn = document.getElementById("projectdeletebtn");
-        const submitbtn = document.getElementById("projectsubmitbtn");
-        const projectFormDiv = document.getElementById("projectFormDiv");
-        
-        saveeditbtn.style.display = "none";
-        deletebtn.style.display = "none";
-        submitbtn.style.display = "block";
-        projectFormDiv.style.display = "none";
-
-        console.log(projects);
-    
-        displayProject();
-    }, {once: true}
-    );
 }
 
 function setActive(id) {

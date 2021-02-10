@@ -312,6 +312,8 @@ li {
 
 .task-item:hover {
     border: 1px solid white;
+    transition: ease;
+    background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(7,49,66,1) 100%);
 }
 
 .task-item {
@@ -322,6 +324,7 @@ li {
     padding-top: 10px;
     margin-bottom: 10px;
     margin-left: 5px;
+    background: rgb(0,0,0);
 }
 
 #taskFormSubmitBtn {
