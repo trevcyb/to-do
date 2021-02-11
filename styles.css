@@ -214,9 +214,14 @@ header {
     margin-left: 20px;
 }
 
+.project-item:hover {
+    transition: ease 0.2s;
+    border: 3px solid black;
+}
+
 .editbtn {
     position: absolute;
-    top: 0px;
+    top: 20px;
     right: 20px;
     outline: none;
     background-color: black;
@@ -320,11 +325,17 @@ li {
     width: 95%;
     border: 1px solid black;
     height: 30px;
-    padding-left: 20px;
+    padding-left: 30px;
     padding-top: 10px;
     margin-bottom: 10px;
     margin-left: 5px;
     background: rgb(0,0,0);
+}
+
+.compCheck {
+    position: absolute;
+    top: 10px;
+    left: 5px;
 }
 
 #taskFormSubmitBtn {
