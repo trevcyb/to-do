@@ -194,16 +194,23 @@ function displayTask () {
         editbtn.style.display = "none";
 //        editbtn.addEventListener("click", editTask);
 
+        let compCheck = document.createElement("input");
+        compCheck.type = "checkbox";
+        compCheck.style.display = "none";
+
         taskli.addEventListener("mouseover", () => {
             editbtn.style.display = "inline-block";
+            compCheck.style.display = "inline-block";
         })
 
         taskli.addEventListener("mouseout", () => {
             editbtn.style.display = "none";
+            compCheck.style.display = "none";
         })
 
         let taskitems = document.querySelectorAll(".task-item");
         taskitems.forEach(item => item.appendChild(editbtn).className = "taskeditbtn");
+        taskitems.forEach(item => item.appendChild(compCheck).className = "compCheck");
     }
 
 }
