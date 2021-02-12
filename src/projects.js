@@ -4,6 +4,8 @@ let projects = [];
 
 let selProject = 0;
 
+let selTask = 0;
+
 class project {
     constructor(name, description, priority, tasks) {
         this.name = name;
@@ -146,7 +148,24 @@ function createTaskForm () {
 
     const taskNotes = document.createElement("input");
     taskNotes.type = "text";
+    taskNotes.id = "taskNotes";
     addTaskForm.appendChild(taskNotes);
+
+    const taskSaveEditBtn = document.createElement("button");
+    taskSaveEditBtn.type = "button";
+    taskSaveEditBtn.id = "taskSaveEditBtn";
+    taskSaveEditBtn.style.display = "none";
+    taskSaveEditBtn.innerHTML = "Save";
+    taskSaveEditBtn.addEventListener("click", saveEditTask);
+    addTaskForm.appendChild(taskSaveEditBtn);
+
+    const taskDeleteBtn = document.createElement("button");
+    taskDeleteBtn.type = "button";
+    taskDeleteBtn.id = "taskDeleteBtn";
+    taskDeleteBtn.innerHTML = "Delete";
+    taskDeleteBtn.style.display = "none";
+    taskDeleteBtn.addEventListener("click", taskDelete);
+    addTaskForm.appendChild(taskDeleteBtn);
 
     const taskSubmitBtn = document.createElement("button");
     taskSubmitBtn.id = "taskSubmitBtn";
@@ -178,6 +197,25 @@ function createTaskForm () {
     return addTaskDiv;
 }
 
+function taskDelete () {
+    projects[selProject].tasks.splice(selTask, 1);
+
+    let taskitems = document.querySelectorAll(".task-item");
+    taskitems.forEach(item => item.remove());
+
+    const taskSaveEditBtn = document.getElementById("taskSaveEditBtn");
+    const taskDeleteBtn = document.getElementById("taskDeleteBtn");
+    const taskSubmitBtn = document.getElementById("taskSubmitBtn");
+    const addTaskDiv = document.getElementById("addTaskDiv");
+
+    taskSaveEditBtn.style.display = "none";
+    taskDeleteBtn.style.display = "none";
+    taskSubmitBtn.style.display = "block";
+    addTaskDiv.style.display = "none";
+
+    displayTask();
+}
+
 function displayTask () {
 
     let taskitems = document.querySelectorAll(".task-item");
@@ -189,14 +227,33 @@ function displayTask () {
         taskli.innerHTML = projects[selProject].tasks[tnum].name;
         taskForm.appendChild(taskli).className = 'task-item';
 
+        if (projects[selProject].tasks[tnum].completed) {
+            taskli.classList.add("checked");
+        } else {
+            taskli.classList.remove("checked");
+        }
+
         let editbtn = document.createElement("button");
         editbtn.innerHTML = "Edit Task";
         editbtn.style.display = "none";
-//        editbtn.addEventListener("click", editTask);
+        editbtn.addEventListener("click", (event) => {
+            selTask = event.target.parentElement.dataset.taskid;
+            editTask();
+        });
 
         let compCheck = document.createElement("input");
         compCheck.type = "checkbox";
         compCheck.style.display = "none";
+        compCheck.addEventListener('change', (event) => {
+            selTask = event.target.parentElement.dataset.taskid;
+            if(compCheck.checked) {
+                projects[selProject].tasks[selTask].completed = true;
+                taskli.classList.add("checked");
+            } else {
+                projects[selProject].tasks[selTask].completed = false;
+                taskli.classList.remove("checked");
+            }
+        })
 
         taskli.addEventListener("mouseover", () => {
             editbtn.style.display = "inline-block";
@@ -213,6 +270,54 @@ function displayTask () {
         taskitems.forEach(item => item.appendChild(compCheck).className = "compCheck");
     }
 
+}
+
+function editTask() {
+    const addTaskDiv = document.getElementById("addTaskDiv");
+    addTaskDiv.style.display = "block";
+
+    const taskNameInput = document.getElementById("taskNameInput");
+    taskNameInput.value = projects[selProject].tasks[selTask].name;
+
+    const duedate = document.getElementById("duedate");
+    duedate.value = projects[selProject].tasks[selTask].duedate;
+
+    const taskNotes = document.getElementById("taskNotes");
+    taskNotes.value = projects[selProject].tasks[selTask].notes;
+
+    const taskSaveEditBtn = document.getElementById("taskSaveEditBtn");
+    taskSaveEditBtn.style.display = "block";
+
+    const taskDeleteBtn = document.getElementById("taskDeleteBtn");
+    taskDeleteBtn.style.display = "block";
+
+    const taskSubmitBtn = document.getElementById("taskSubmitBtn");
+    taskSubmitBtn.style.display = "none";
+}
+
+function saveEditTask() {
+    projects[selProject].tasks[selTask].name = taskNameInput.value;
+    projects[selProject].tasks[selTask].duedate = duedate.value;
+    projects[selProject].tasks[selTask].notes = taskNotes.value;
+
+    taskNameInput.value = "";
+    duedate.value = "";
+    taskNotes.value = "";
+
+    let taskitems = document.querySelectorAll(".task-item");
+    taskitems.forEach(task => task.remove());
+
+    const taskSaveEditBtn = document.getElementById("taskSaveEditBtn");
+    const taskDeleteBtn = document.getElementById("taskDeleteBtn");
+    const taskSubmitBtn = document.getElementById("taskSubmitBtn");
+    const addTaskDiv = document.getElementById("addTaskDiv");
+
+    taskSaveEditBtn.style.display = "none";
+    taskDeleteBtn.style.display = "none";
+    taskSubmitBtn.style.display = "block";
+    addTaskDiv.style.display = "none";
+
+    displayTask();
 }
 
 function createProjectForm() {
@@ -397,12 +502,12 @@ function displayProject() {
     projectitems.forEach(projectitem => projectitem.addEventListener('click', (event) => {
         taskSectionDiv.style.display = "block";
         selProject = event.target.parentElement.dataset.projid;
-        document.getElementById("taskFormHeader").innerHTML = event.target.firstChild.nodeValue;
+        document.getElementById("taskFormHeader").innerHTML = projects[selProject].name;
         displayTask();
     }))
 }
 
-function editProject (event) {
+function editProject () {
 
     const projectFormDiv = document.getElementById("projectFormDiv");
     projectFormDiv.style.display = "block";
