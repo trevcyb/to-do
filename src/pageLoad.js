@@ -19,9 +19,11 @@ function createSideBar () {
 
     const homeBtn = createSideBarElement('home', 'Home');
     const projectsBtn = createSideBarElement('projectsSB', 'Projects');
+    const saveProjectsBtn = createSideBarElement('saveProjectsBtn', 'Save Projects')
 
     sidebar.appendChild(homeBtn);
     sidebar.appendChild(projectsBtn);
+    sidebar.appendChild(saveProjectsBtn);
 
     return sidebar;
 }

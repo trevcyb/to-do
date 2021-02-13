@@ -1,10 +1,12 @@
 let i = 0;
 
-let projects = [];
-
 let selProject = 0;
 
 let selTask = 0;
+
+let projects = [];
+
+let savedJSON = [];
 
 class project {
     constructor(name, description, priority, tasks) {
@@ -24,6 +26,7 @@ class task {
         this.completed = completed;
     }
 }
+
 
 function createProjectSection() {
 
@@ -86,12 +89,14 @@ function createTaskSection() {
     taskFormSubmit.type = "button";
     taskFormSubmit.innerHTML = "Save";
     taskFormSubmit.id = "taskFormSubmitBtn";
+    taskFormSubmit.classList.add("formBtn");
     taskListDiv.appendChild(taskFormSubmit);
 
     const taskFormCancel = document.createElement("button");
     taskFormCancel.type = "button";
     taskFormCancel.innerHTML = "Cancel";
     taskFormCancel.id = "taskFormCancelBtn";
+    taskFormCancel.classList.add("formBtn");
     taskFormCancel.addEventListener("click", () => {
         taskSectionDiv.style.display = "none";
         displayTask();
@@ -154,6 +159,7 @@ function createTaskForm () {
     const taskSaveEditBtn = document.createElement("button");
     taskSaveEditBtn.type = "button";
     taskSaveEditBtn.id = "taskSaveEditBtn";
+    taskSaveEditBtn.classList.add("formBtn");
     taskSaveEditBtn.style.display = "none";
     taskSaveEditBtn.innerHTML = "Save";
     taskSaveEditBtn.addEventListener("click", saveEditTask);
@@ -163,6 +169,7 @@ function createTaskForm () {
     taskDeleteBtn.type = "button";
     taskDeleteBtn.id = "taskDeleteBtn";
     taskDeleteBtn.innerHTML = "Delete";
+    taskDeleteBtn.classList.add("formBtn");
     taskDeleteBtn.style.display = "none";
     taskDeleteBtn.addEventListener("click", taskDelete);
     addTaskForm.appendChild(taskDeleteBtn);
@@ -170,6 +177,7 @@ function createTaskForm () {
     const taskSubmitBtn = document.createElement("button");
     taskSubmitBtn.id = "taskSubmitBtn";
     taskSubmitBtn.type = "button";
+    taskSubmitBtn.classList.add("formBtn");
     taskSubmitBtn.innerHTML = "Submit";
     taskSubmitBtn.addEventListener("click", () => {
         const newTask = new task(taskNameInput.value, taskDueDate.value, taskNotes.value, 1, false);
@@ -185,6 +193,7 @@ function createTaskForm () {
     const taskCancelBtn = document.createElement("button");
     taskCancelBtn.id = "taskSubmitBtn";
     taskCancelBtn.type = "button";
+    taskCancelBtn.classList.add("formBtn");
     taskCancelBtn.innerHTML = "Cancel";
     taskCancelBtn.addEventListener("click", () => {
         taskNameInput.value = "";
@@ -334,6 +343,7 @@ function createProjectForm() {
     projectFormCloseBtn.innerHTML = "X";
     projectFormCloseBtn.id = "projectxbtn";
     projectFormCloseBtn.type = "button";
+    projectFormCloseBtn.classList.add("formBtn");
     projectFormCloseBtn.addEventListener('click', cancelForm);
     projectForm.appendChild(projectFormCloseBtn);
 
@@ -360,6 +370,7 @@ function createProjectForm() {
     const submitbtn = document.createElement("button");
     submitbtn.type = "button";
     submitbtn.id = "projectsubmitbtn";
+    submitbtn.classList.add("formBtn");
     submitbtn.innerHTML = "Submit";
     submitbtn.addEventListener("click", () => {
     addNewProject();
@@ -370,6 +381,7 @@ function createProjectForm() {
     const cancelbtn = document.createElement("button");
     cancelbtn.innerHTML = "Cancel";
     cancelbtn.id = "projectcancelbtn";
+    cancelbtn.classList.add("formBtn");
     cancelbtn.type = "button";
     cancelbtn.addEventListener('click', cancelForm);
     projectForm.appendChild(cancelbtn);
@@ -377,6 +389,7 @@ function createProjectForm() {
     const deletebtn = document.createElement("button");
     deletebtn.innerHTML = "Delete";
     deletebtn.id = "projectdeletebtn";
+    deletebtn.classList.add("formBtn");
     deletebtn.type = "button";
     deletebtn.style.display = "none";
     deletebtn.addEventListener("click", deleteProject);
@@ -386,6 +399,7 @@ function createProjectForm() {
     saveeditbtn.type = "button";
     saveeditbtn.id = "projectsaveeditbtn";
     saveeditbtn.innerHTML = "Save Edit";
+    saveeditbtn.classList.add("formBtn");
     saveeditbtn.style.display = "none";
     saveeditbtn.addEventListener("click", saveEditProject);
     projectForm.appendChild(saveeditbtn);
@@ -536,6 +550,22 @@ function setActive(id) {
     projectsBtn.classList.add("active");
 }
 
+function showSavedProjects(arr) {
+    if (arr) {
+        projects = JSON.parse(arr);
+        i = arr.length;
+        console.log("yes");
+    } else {
+        projects = [];
+        console.log("no");
+    }
+}
+
+function saveProjects() {
+    savedJSON = (JSON.stringify(projects));
+    localStorage.setItem('storedProjects', savedJSON);
+}
+
 function loadProjects() {
     const content = document.getElementById("main");
 
@@ -556,6 +586,12 @@ function loadProjects() {
     content.appendChild(taskSectionPage);
     content.appendChild(taskFormPage);
 
+    document.getElementById("saveProjectsBtn").style.display = "block";
+    saveProjectsBtn.addEventListener("click", saveProjects, {once: true});
+
+    const storedProjects = localStorage.getItem('storedProjects');
+
+    showSavedProjects(storedProjects);
     displayProject();
 }
 

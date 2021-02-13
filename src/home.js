@@ -29,6 +29,8 @@ function loadHome () {
 
     content.innerHTML = "";
 
+    document.getElementById("saveProjectsBtn").style.display = "none";
+
     setActive("home");
 
     content.appendChild(aboutUsPage);
