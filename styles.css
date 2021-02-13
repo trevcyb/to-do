@@ -18,19 +18,21 @@ p {
     margin-left: 50px;
     margin-right: 50px;
     font-size: 30px;
+    color: white;
 }
 
 #sidebar {
     height: 100%;
     width: 17%;
     max-width: 212px;
-    position: fixed;
+    position: absolute;
     top: 75px;
     left: 8px;
     bottom: 8px;
     background-color: black;
     overflow-x: hidden;
     padding-top: 20px;
+    padding-right: 5px;
     border-radius: 15px;
 }
 
@@ -51,8 +53,8 @@ p {
 }
 
 #main {
-    border:grey 2px solid;
-    background-color: grey;
+    border:black 2px solid;
+    background-color: rgb(48, 46, 46);
     border-radius: 25px;
     position: absolute;
     height: 100%;
@@ -61,21 +63,24 @@ p {
     top: 75px;
 }
 
+
 #projectHeader {
     font-family: 'Courier New', Courier, monospace;
-    background-color: grey;
-    border-bottom: black 2px solid;
+    background-color: rgb(48, 46, 46);
+    border-bottom: white 2px solid;
     text-align: center;
     margin-bottom: 0;
     font-size: 35px;
+    color: white;
 }
 
 #aboutUsHeader {
     font-family: 'Courier New', Courier, monospace;
-    background-color: grey;
-    border-bottom: black 2px solid;
+    background-color: rgb(48, 46, 46);
+    border-bottom: white 2px solid;
     text-align: center;
     font-size: 35px;
+    color: white;
 }
 
 #aboutUsInfo {
@@ -131,57 +136,48 @@ p {
 }
 
 #projectxbtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 50%;
     position: absolute;
     top: 10px;
     right: 20px;
 }
 
-#projectsubmitbtn {
+.formBtn {
+    outline: none;
     background-color: grey;
     color: white;
     border: 1px solid grey;
     border-radius: 10px;
+    font-size: 15px;
+}
+
+.formBtn:hover {
+    transition: ease 1s;
+    background-color: white;
+    color: black;
+}
+
+#projectsubmitbtn {
     position: absolute;
     bottom: 10px;
     left: 40%;
-    font-size: 15px;
 }
 
 #projectcancelbtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 10px;
     position: absolute;
     bottom: 10px;
     left: 60%;
-    font-size: 15px;
 }
 
 #projectsaveeditbtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 10px;
     position: absolute;
     bottom: 10px;
     left: 37%;
-    font-size: 15px;
 }
 
 #projectdeletebtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 10px;
     position: absolute;
     bottom: 10px;
     left: 49%;
-    font-size: 15px;
 }
 
 #addNewProject {
@@ -213,17 +209,18 @@ p {
 .project-item {
     font-family:'Courier New', Courier, monospace;
     position: relative;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid white;
 }
 
 .project-item h2 {
     width: 80%;
     margin-left: 20px;
+    color:white;
 }
 
 .project-item:hover {
     transition: ease 0.2s;
-    border: 3px solid black;
+    border: 3px solid white;
 }
 
 .editbtn {
@@ -346,27 +343,15 @@ li {
 }
 
 #taskFormSubmitBtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 10px;
     position: absolute;
     bottom: 10px;
     left: 40%;
-    font-size: 15px;
-
 }
 
 #taskFormCancelBtn {
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: 10px;
     position: absolute;
     bottom: 10px;
     left: 55%;
-    font-size: 15px;
-
 }
 
 #addTaskDiv {
@@ -398,6 +383,13 @@ li {
     grid-template-columns: 200px auto;
     grid-column-gap: 50px;
     grid-row-gap: 20px;
+}
+
+@media screen {
+    #addTaskForm {
+        box-sizing: border-box;
+        width: 100%;
+    }
 }
 
 .taskeditbtn {
