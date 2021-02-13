@@ -14,6 +14,6 @@ init();
 
 function init() {
     loadPage();
-    loadProjects();
+    loadHome();
     sbevents();
 }
